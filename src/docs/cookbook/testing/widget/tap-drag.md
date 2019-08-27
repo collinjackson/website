@@ -3,6 +3,10 @@ title: Tap, drag, and enter text
 prev:
   title: Find widgets
   path: /docs/cookbook/testing/widget/finders
+next:
+  title: Live Testing and Firebase Test Lab
+  path: /docs/cookbook/testing/widget/instrumentation-testing.md
+
 ---
 
 {% assign api = site.api | append: '/flutter' -%}

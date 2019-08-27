@@ -1,11 +1,8 @@
 ---
-title: Instrumentation Testing
+title: Live Testing and Firebase Test Lab
 prev:
-  title: Performance profiling
-  path: /docs/cookbook/testing/integration/introduction
-next:
-  title: An introduction to unit testing
-  path: /docs/cookbook/testing/unit/introduction
+  title: Tap, drag, and enter text
+  path: /docs/cookbook/testing/widget/tap-drag
 ---
 
 In addition to running on your host machine, widget tests can be
@@ -36,7 +33,7 @@ pubspec.yaml. For plugins, do this in the pubspec.yaml of the example app.
 
 Import 'package:instrumentation_adapter/instrumentation.adapter.dart'.
 
-Invoke `InstrumentationAdapterFlutterBinding.ensureInitialized()`` at the
+Invoke `InstrumentationAdapterFlutterBinding.ensureInitialized() at the
 start of a widget test file's main().
 
 Ensure that all your tests use `testWidgets` rather than `test`.
@@ -70,9 +67,7 @@ You can run your tests locally to get results quickly. However, you'll need a
 locally connected Android device or an emulator installed. If you don't have one,
 you can skip this step.
 
-Run the following command line, replacing <path_to_test> to the
-
-$(pwd)/../instrumentation_adapter/package_info_test.dart
+Run the following command line:
 
 ```
 ./gradlew \
@@ -87,6 +82,19 @@ the necessary artifacts for uploading:
 
 ./gradlew assembleAndroidTest
 ./gradlew assembleDebug -Ptarget=<path_to_test>.dart
+```
+
+Use gcloud to upload your instrumentation test to Firebase Test Lab
+
+```
+gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+gcloud --quiet config set project flutter-infra
+gcloud firebase test android run --type instrumentation \
+  --app build/app/outputs/apk/debug/app-debug.apk \
+  --test build/app/outputs/apk/androidTest/debug/app-debug-androidTest.apk\
+  --timeout 2m \
+  --results-bucket=gs://<YOUR_RESULTS_BUCKET> \
+  --results-dir=<YOUR_RESULTS_DIR>
 ```
 
 Once your Firebase Test Lab test is completed, your results will be visible
